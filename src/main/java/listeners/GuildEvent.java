@@ -24,34 +24,55 @@
 
 package listeners;
 
+import java.util.Objects;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import settings.BotSettings;
+import settings.GuildProperties;
 
 /**
  * The type Guild event.
  */
 public class GuildEvent extends ListenerAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
+  private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
 
-    /**
-     * On guild member join.
-     *
-     * @param event the event
-     */
-    @Override
-    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
-        User user = event.getUser();
-        user.openPrivateChannel().queue(
-                privateChannel -> {
-                    privateChannel.sendMessageFormat("Message goes here!").queue();
-                    log.info("Private Message has been sent");
-                }
-        );
-    }
+  /**
+   * On guild member join.
+   *
+   * @param event the event
+   */
+  @Override
+  public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+    log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
+    User user = event.getUser();
+    user.openPrivateChannel().queue(
+        privateChannel -> {
+          privateChannel.sendMessageFormat(
+              BotSettings.Settings().getProperty(GuildProperties.WELCOME_MESSAGE))
+              .queue();
+          log.info("Private Message has been sent");
+        }
+    );
+  }
 
+  /**
+   * On guild join.
+   *
+   * @param event the event
+   */
+  @Override
+  public void onGuildJoin(GuildJoinEvent event) {
+    JDA api = event.getJDA();
+    long guildID = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
+    BotSettings.createFile(guildID);
+    BotSettings.Settings()
+        .setProperty(GuildProperties.GUILD_NAME, event.getGuild().getName());
+    BotSettings.Settings().save();
+  }
 }
