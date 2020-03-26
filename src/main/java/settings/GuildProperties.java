@@ -29,10 +29,19 @@ import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.properties.Property;
 
+/**
+ * The type Guild properties.
+ */
 public class GuildProperties implements SettingsHolder {
 
+  /**
+   * The constant WELCOME_MESSAGE.
+   */
   public static final Property<String> WELCOME_MESSAGE = newProperty("welcome_message",
       "This is a welcome message");
+  /**
+   * The constant GUILD_NAME.
+   */
   public static final Property<String> GUILD_NAME = newProperty("guild_name",
       "Default Server Name");
 

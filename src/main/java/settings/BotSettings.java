@@ -28,14 +28,25 @@ import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
 import java.io.File;
 
+/**
+ * The type Bot settings.
+ */
 public class BotSettings {
 
   private static SettingsManager settings;
 
+  /**
+   * Instantiates a new Bot settings.
+   */
   public BotSettings() {
   }
 
-  public static void createFile(Long guildid) {
+  /**
+   * Create file.
+   *
+   * @param guildid the guildid
+   */
+  public void createFile(Long guildid) {
     File mkGuilds = new File("guilds");
     File settingFile = new File("guilds\\" + guildid + ".yml");
     settings = SettingsManagerBuilder
@@ -44,7 +55,12 @@ public class BotSettings {
         .create();
   }
 
-  public static SettingsManager Settings() {
+  /**
+   * Settings settings manager.
+   *
+   * @return the settings manager
+   */
+  public SettingsManager Settings() {
     return settings;
   }
 }

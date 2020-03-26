@@ -41,6 +41,7 @@ import settings.GuildProperties;
 public class GuildEvent extends ListenerAdapter {
 
   private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
+  private BotSettings botSettings = new BotSettings();
 
   /**
    * On guild member join.
@@ -54,7 +55,7 @@ public class GuildEvent extends ListenerAdapter {
     user.openPrivateChannel().queue(
         privateChannel -> {
           privateChannel.sendMessageFormat(
-              BotSettings.Settings().getProperty(GuildProperties.WELCOME_MESSAGE))
+              botSettings.Settings().getProperty(GuildProperties.WELCOME_MESSAGE))
               .queue();
           log.info("Private Message has been sent");
         }
@@ -70,9 +71,9 @@ public class GuildEvent extends ListenerAdapter {
   public void onGuildJoin(GuildJoinEvent event) {
     JDA api = event.getJDA();
     long guildID = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
-    BotSettings.createFile(guildID);
-    BotSettings.Settings()
+    botSettings.createFile(guildID);
+    botSettings.Settings()
         .setProperty(GuildProperties.GUILD_NAME, event.getGuild().getName());
-    BotSettings.Settings().save();
+    botSettings.Settings().save();
   }
 }
