@@ -22,21 +22,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package tv.AshDev.AGPB;
+
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import commands.SetWelcomeMessage;
-import data.BotToken;
-import listeners.GuildEvent;
-import net.dv8tion.jda.api.AccountType;
+import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import settings.BotSettings;
-
-import javax.security.auth.login.LoginException;
+import tv.AshDev.AGPB.commands.SetWelcomeMessage;
+import tv.AshDev.AGPB.data.BotToken;
+import tv.AshDev.AGPB.listeners.GuildEvent;
+import tv.AshDev.AGPB.settings.BotSettings;
 
 /**
  * The type Main.
@@ -44,7 +44,7 @@ import javax.security.auth.login.LoginException;
 public class Main {
 
   private static final BotToken botToken = new BotToken();
-  private static final Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
   /**
    * The entry point of application.
@@ -59,20 +59,23 @@ public class Main {
 
     EventWaiter waiter = new EventWaiter();
     CommandClientBuilder bot = new CommandClientBuilder()
-        .setPrefix("-")
+        .setPrefix(Constants.PREFIX)
         .setStatus(OnlineStatus.ONLINE)
         .setActivity(Activity.watching("everyone"))
-        .setOwnerId("160269653136900096")
+        .setOwnerId(Constants.OWNER_ID)
+        .setEmojis(Constants.SUCCESS, Constants.WARNING, Constants.ERROR)
+        .setServerInvite(Constants.SERVER_INVITE)
         .addCommands(
             new SetWelcomeMessage(botSettings)
         );
 
-    JDA api = new JDABuilder(AccountType.BOT)
+    JDA api = JDABuilder.create(Constants.GATEWAY_INTENTS)
         .setToken(botToken.getToken())
         .addEventListeners(waiter, bot.build(), new GuildEvent(botSettings))
         .build();
     api.awaitReady();
-    log.info("Finished Building JDA!");
+    LOG.info("Finished Building JDA!");
 
   }
+
 }

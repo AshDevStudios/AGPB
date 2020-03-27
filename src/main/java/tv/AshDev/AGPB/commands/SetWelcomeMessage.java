@@ -22,31 +22,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package commands;
+package tv.AshDev.AGPB.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import settings.BotSettings;
-import settings.GuildProperties;
 
 /**
  * The type Set welcome message.
  */
 public class SetWelcomeMessage extends Command {
 
-  private static final Logger log = LoggerFactory.getLogger(SetWelcomeMessage.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SetWelcomeMessage.class);
 
-  // The bot settings object initialized in the Main class
-  private final BotSettings botSettings;
 
-  /**
-   * Instantiates a new Set welcome message.
-   */
-  public SetWelcomeMessage(final BotSettings botSettings) {
-    this.botSettings = botSettings;
-
+  public SetWelcomeMessage() {
     this.name = "setwelcome";
     this.help = "Set the welcome message new users will get";
     this.guildOnly = true;
@@ -61,18 +52,10 @@ public class SetWelcomeMessage extends Command {
   @Override
   protected void execute(CommandEvent event) {
     // Getting the guild ID
-    final Long guildId = event.getGuild().getIdLong();
-
+    final long guildId = event.getGuild().getIdLong();
     String msg = event.getArgs().trim();
-
-    if (!msg.isEmpty()) {
-      botSettings.getSettings(guildId).setProperty(GuildProperties.WELCOME_MESSAGE, msg);
-      botSettings.getSettings(guildId).save();
-
-      log.info("Welcome message has been set.");
-    } else {
-      log.error("Args where empty, no message");
-    }
+    // TODO: 28/03/2020
+    //  Add database code here to get welcome message.
   }
 
 }

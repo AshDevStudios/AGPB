@@ -22,48 +22,52 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package settings;
+package tv.AshDev.AGPB.utils;
 
-import ch.jalu.configme.SettingsManager;
-import ch.jalu.configme.SettingsManagerBuilder;
-
-import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * The type Bot settings.
- */
-public class BotSettings {
+public class FixedCache<K, V> {
 
-    // Will hold the settings for each Guild
-    private final Map<Long, SettingsManager> settings = new HashMap<>();
+  private final Map<K, V> map;
+  private final K[] keys;
+  private int currIndex = 0;
 
-    /**
-     * Create file.
-     *
-     * @param guildId the guild ID
-     */
-    public void createFile(final Long guildId) {
-        File settingFile = new File("guilds\\" + guildId + ".yml");
-
-        final SettingsManager settingsManager = SettingsManagerBuilder
-                .withYamlFile(settingFile).configurationData(GuildProperties.class)
-                .useDefaultMigrationService()
-                .create();
-
-        // Puts the setting manager in the Map
-        settings.put(guildId, settingsManager);
+  public FixedCache(int size) {
+    this.map = new HashMap<>();
+    if (size < 1) {
+      throw new IllegalArgumentException("Cache size must be at least 1!");
     }
+    this.keys = (K[]) new Object[size];
+  }
 
-    /**
-     * Settings settings manager.
-     *
-     * @param guildId The guild ID
-     * @return The settings manager for that guild
-     */
-    public SettingsManager getSettings(final long guildId) {
-        // Returns the settings manager for this guild ID
-        return settings.get(guildId);
+  public V put(K key, V value) {
+    if (map.containsKey(key)) {
+      return map.put(key, value);
     }
+    if (keys[currIndex] != null) {
+      map.remove(keys[currIndex]);
+    }
+    keys[currIndex] = key;
+    currIndex = (currIndex + 1) % keys.length;
+    return map.put(key, value);
+  }
+
+  public V pull(K key) {
+    return map.remove(key);
+  }
+
+  public V get(K key) {
+    return map.get(key);
+  }
+
+  public boolean contains(K key) {
+    return map.containsKey(key);
+  }
+
+  public Collection<V> getValues() {
+    return map.values();
+  }
+
 }

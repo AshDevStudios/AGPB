@@ -22,30 +22,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package settings;
+package tv.AshDev.AGPB.database.mariadb.columns;
 
-import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
-import ch.jalu.configme.SettingsHolder;
-import ch.jalu.configme.properties.Property;
+public class StringColumn extends SQLColumn<String> {
 
-/**
- * The type Guild properties.
- */
-public class GuildProperties implements SettingsHolder {
+  private final int maxLength;
 
-  /**
-   * The constant WELCOME_MESSAGE.
-   */
-  public static final Property<String> WELCOME_MESSAGE = newProperty("welcome_message",
-      "This is a welcome message");
-  /**
-   * The constant GUILD_NAME.
-   */
-  public static final Property<String> GUILD_NAME = newProperty("guild_name",
-      "Default Server Name");
-
-  private GuildProperties() {
+  public StringColumn(String name, boolean nullable, String defaultValue, int maxLength) {
+    this(name, nullable, defaultValue, false, maxLength);
   }
 
+  public StringColumn(String name, boolean nullable, String defaultValue, boolean publicKey,
+      int maxLength) {
+    super(name, nullable, defaultValue, publicKey);
+    this.maxLength = maxLength;
+  }
+
+  @Override
+  public String getDataDescription() {
+    return "VARCHAR(" + maxLength + ")" + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
+        + nullable() + (primaryKey ? " PRIMARY KEY" : "");
+  }
+
+  @Override
+  public String getValue(ResultSet results) throws SQLException {
+    return results.getString(name);
+  }
+
+  @Override
+  public void updateValue(ResultSet results, String newValue) throws SQLException {
+    results.updateString(name, newValue);
+  }
 }
