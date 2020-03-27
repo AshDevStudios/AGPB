@@ -26,41 +26,44 @@ package settings;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
+
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Bot settings.
  */
 public class BotSettings {
 
-  private static SettingsManager settings;
+    // Will hold the settings for each Guild
+    private final Map<Long, SettingsManager> settings = new HashMap<>();
 
-  /**
-   * Instantiates a new Bot settings.
-   */
-  public BotSettings() {
-  }
+    /**
+     * Create file.
+     *
+     * @param guildId the guild ID
+     */
+    public void createFile(final Long guildId) {
+        File settingFile = new File("guilds\\" + guildId + ".yml");
 
-  /**
-   * Create file.
-   *
-   * @param guildid the guildid
-   */
-  public void createFile(Long guildid) {
-    File mkGuilds = new File("guilds");
-    File settingFile = new File("guilds\\" + guildid + ".yml");
-    settings = SettingsManagerBuilder
-        .withYamlFile(settingFile).configurationData(GuildProperties.class)
-        .useDefaultMigrationService()
-        .create();
-  }
+        final SettingsManager settingsManager = SettingsManagerBuilder
+                .withYamlFile(settingFile).configurationData(GuildProperties.class)
+                .useDefaultMigrationService()
+                .create();
 
-  /**
-   * Settings settings manager.
-   *
-   * @return the settings manager
-   */
-  public SettingsManager Settings() {
-    return settings;
-  }
+        // Puts the setting manager in the Map
+        settings.put(guildId, settingsManager);
+    }
+
+    /**
+     * Settings settings manager.
+     *
+     * @param guildId The guild ID
+     * @return The settings manager for that guild
+     */
+    public SettingsManager getSettings(final long guildId) {
+        // Returns the settings manager for this guild ID
+        return settings.get(guildId);
+    }
 }

@@ -37,12 +37,16 @@ import settings.GuildProperties;
 public class SetWelcomeMessage extends Command {
 
   private static final Logger log = LoggerFactory.getLogger(SetWelcomeMessage.class);
-  private BotSettings botSettings = new BotSettings();
+
+  // The bot settings object initialized in the Main class
+  private final BotSettings botSettings;
 
   /**
    * Instantiates a new Set welcome message.
    */
-  public SetWelcomeMessage() {
+  public SetWelcomeMessage(final BotSettings botSettings) {
+    this.botSettings = botSettings;
+
     this.name = "setwelcome";
     this.help = "Set the welcome message new users will get";
     this.guildOnly = true;
@@ -56,10 +60,15 @@ public class SetWelcomeMessage extends Command {
    */
   @Override
   protected void execute(CommandEvent event) {
+    // Getting the guild ID
+    final Long guildId = event.getGuild().getIdLong();
+
     String msg = event.getArgs().trim();
+
     if (!msg.isEmpty()) {
-      botSettings.Settings().setProperty(GuildProperties.WELCOME_MESSAGE, msg);
-      botSettings.Settings().save();
+      botSettings.getSettings(guildId).setProperty(GuildProperties.WELCOME_MESSAGE, msg);
+      botSettings.getSettings(guildId).save();
+
       log.info("Welcome message has been set.");
     } else {
       log.error("Args where empty, no message");
