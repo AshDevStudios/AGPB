@@ -24,9 +24,10 @@
 
 package tv.AshDev.AGPB.database.mariadb;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,13 +36,17 @@ import org.slf4j.LoggerFactory;
 
 public class DatabaseConnector {
 
-  private final Connection connection;
+  private Connection connection;
   protected static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
   public DatabaseConnector(String host, String user, String password) throws SQLException {
 
-    connection = DriverManager.getConnection(
-        String.format("jdbc:mariadb://%s?user=%s&password=%s", host, user, password));
+    HikariConfig config = new HikariConfig();
+    config.setJdbcUrl("jdbc:mariadb://" + host);
+    config.setUsername(user);
+    config.setPassword(password);
+    HikariDataSource ds = new HikariDataSource(config);
+    connection = ds.getConnection();
     LOG.info("Connected to database");
 
   }
