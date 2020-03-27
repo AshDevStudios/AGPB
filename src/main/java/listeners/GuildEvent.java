@@ -24,7 +24,6 @@
 
 package listeners;
 
-import java.util.Objects;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -35,45 +34,61 @@ import org.slf4j.LoggerFactory;
 import settings.BotSettings;
 import settings.GuildProperties;
 
+import java.util.Objects;
+
 /**
  * The type Guild event.
  */
 public class GuildEvent extends ListenerAdapter {
 
-  private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
-  private BotSettings botSettings = new BotSettings();
+    private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
 
-  /**
-   * On guild member join.
-   *
-   * @param event the event
-   */
-  @Override
-  public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-    log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
-    User user = event.getUser();
-    user.openPrivateChannel().queue(
-        privateChannel -> {
-          privateChannel.sendMessageFormat(
-              botSettings.Settings().getProperty(GuildProperties.WELCOME_MESSAGE))
-              .queue();
-          log.info("Private Message has been sent");
-        }
-    );
-  }
+    // The bot settings object initialized in the Main class
+    private final BotSettings botSettings;
 
-  /**
-   * On guild join.
-   *
-   * @param event the event
-   */
-  @Override
-  public void onGuildJoin(GuildJoinEvent event) {
-    JDA api = event.getJDA();
-    long guildID = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
-    botSettings.createFile(guildID);
-    botSettings.Settings()
-        .setProperty(GuildProperties.GUILD_NAME, event.getGuild().getName());
-    botSettings.Settings().save();
-  }
+    /**
+     * Constructor for the GuildEvent with the bot settings
+     *
+     * @param botSettings The bot settings form the Main class
+     */
+    public GuildEvent(final BotSettings botSettings) {
+        this.botSettings = botSettings;
+    }
+
+    /**
+     * On guild member join.
+     *
+     * @param event the event
+     */
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        // The guild ID
+        final long guildId = event.getGuild().getIdLong();
+
+        log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
+        User user = event.getUser();
+        user.openPrivateChannel().queue(
+                privateChannel -> {
+                    privateChannel.sendMessageFormat(
+                            botSettings.getSettings(guildId).getProperty(GuildProperties.WELCOME_MESSAGE))
+                            .queue();
+                    log.info("Private Message has been sent");
+                }
+        );
+    }
+
+    /**
+     * On guild join.
+     *
+     * @param event the event
+     */
+    @Override
+    public void onGuildJoin(GuildJoinEvent event) {
+        JDA api = event.getJDA();
+        long guildId = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
+        botSettings.createFile(guildId);
+        botSettings.getSettings(guildId)
+                .setProperty(GuildProperties.GUILD_NAME, event.getGuild().getName());
+        botSettings.getSettings(guildId).save();
+    }
 }

@@ -26,7 +26,6 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import commands.SetWelcomeMessage;
 import data.BotToken;
-import javax.security.auth.login.LoginException;
 import listeners.GuildEvent;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -35,6 +34,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import settings.BotSettings;
+
+import javax.security.auth.login.LoginException;
 
 /**
  * The type Main.
@@ -52,6 +54,8 @@ public class Main {
    * @throws InterruptedException the interrupted exception
    */
   public static void main(String[] args) throws LoginException, InterruptedException {
+    // Instantiating the bot settings here so it can be used on every class you need
+    final BotSettings botSettings = new BotSettings();
 
     EventWaiter waiter = new EventWaiter();
     CommandClientBuilder bot = new CommandClientBuilder()
@@ -60,12 +64,12 @@ public class Main {
         .setActivity(Activity.watching("everyone"))
         .setOwnerId("160269653136900096")
         .addCommands(
-            new SetWelcomeMessage()
+            new SetWelcomeMessage(botSettings)
         );
 
     JDA api = new JDABuilder(AccountType.BOT)
         .setToken(botToken.getToken())
-        .addEventListeners(waiter, bot.build(), new GuildEvent())
+        .addEventListeners(waiter, bot.build(), new GuildEvent(botSettings))
         .build();
     api.awaitReady();
     log.info("Finished Building JDA!");
