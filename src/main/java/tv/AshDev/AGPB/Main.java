@@ -26,7 +26,6 @@ package tv.AshDev.AGPB;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -35,27 +34,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tv.AshDev.AGPB.commands.SetWelcomeMessage;
 import tv.AshDev.AGPB.data.BotToken;
+import tv.AshDev.AGPB.database.Database;
 import tv.AshDev.AGPB.listeners.GuildEvent;
-import tv.AshDev.AGPB.settings.BotSettings;
 
 /**
  * The type Main.
  */
 public class Main {
 
-  private static final BotToken botToken = new BotToken();
   private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+  private final BotToken botToken;
+  private final Database database;
 
   /**
-   * The entry point of application.
+   * Instantiates a new Main.
    *
-   * @param args the input arguments
-   * @throws LoginException       the login exception
-   * @throws InterruptedException the interrupted exception
+   * @throws Exception the exception
    */
-  public static void main(String[] args) throws LoginException, InterruptedException {
-    // Instantiating the bot settings here so it can be used on every class you need
-    final BotSettings botSettings = new BotSettings();
+  public Main() throws Exception {
+
+    botToken = new BotToken();
+    database = new Database("localhost:3306/AGPB", "root", "root");
 
     EventWaiter waiter = new EventWaiter();
     CommandClientBuilder bot = new CommandClientBuilder()
@@ -65,16 +64,29 @@ public class Main {
         .setOwnerId(Constants.OWNER_ID)
         .setEmojis(Constants.SUCCESS, Constants.WARNING, Constants.ERROR)
         .setServerInvite(Constants.SERVER_INVITE)
+        .setGuildSettingsManager(database.settings)
         .addCommands(
-            new SetWelcomeMessage(botSettings)
+            new SetWelcomeMessage()
         );
 
     JDA api = JDABuilder.create(Constants.GATEWAY_INTENTS)
         .setToken(botToken.getToken())
-        .addEventListeners(waiter, bot.build(), new GuildEvent(botSettings))
+        .addEventListeners(waiter, bot.build(), new GuildEvent())
         .build();
     api.awaitReady();
     LOG.info("Finished Building JDA!");
+
+  }
+
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws Exception the exception
+   */
+  public static void main(String[] args) throws Exception {
+    // Instantiating the bot settings here so it can be used on every class you need
+    new Main();
 
   }
 

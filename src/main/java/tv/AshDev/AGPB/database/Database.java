@@ -27,10 +27,28 @@ package tv.AshDev.AGPB.database;
 import java.sql.SQLException;
 import tv.AshDev.AGPB.database.mariadb.DatabaseConnector;
 
+/**
+ * The type Database.
+ */
 public class Database extends DatabaseConnector {
 
+  /**
+   * The Settings.
+   */
+  public final GuildSettingsDataManager settings;
+
+  /**
+   * Instantiates a new Database.
+   *
+   * @param host     the host
+   * @param user     the user
+   * @param password the password
+   * @throws SQLException the sql exception
+   */
   public Database(String host, String user, String password) throws SQLException {
     super(host, user, password);
+
+    settings = new GuildSettingsDataManager(this);
 
     init();
 

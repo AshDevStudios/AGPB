@@ -28,12 +28,23 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Fixed cache.
+ *
+ * @param <K> the type parameter
+ * @param <V> the type parameter
+ */
 public class FixedCache<K, V> {
 
   private final Map<K, V> map;
   private final K[] keys;
   private int currIndex = 0;
 
+  /**
+   * Instantiates a new Fixed cache.
+   *
+   * @param size the size
+   */
   public FixedCache(int size) {
     this.map = new HashMap<>();
     if (size < 1) {
@@ -42,6 +53,13 @@ public class FixedCache<K, V> {
     this.keys = (K[]) new Object[size];
   }
 
+  /**
+   * Put v.
+   *
+   * @param key   the key
+   * @param value the value
+   * @return the v
+   */
   public V put(K key, V value) {
     if (map.containsKey(key)) {
       return map.put(key, value);
@@ -54,18 +72,41 @@ public class FixedCache<K, V> {
     return map.put(key, value);
   }
 
+  /**
+   * Pull v.
+   *
+   * @param key the key
+   * @return the v
+   */
   public V pull(K key) {
     return map.remove(key);
   }
 
+  /**
+   * Get v.
+   *
+   * @param key the key
+   * @return the v
+   */
   public V get(K key) {
     return map.get(key);
   }
 
+  /**
+   * Contains boolean.
+   *
+   * @param key the key
+   * @return the boolean
+   */
   public boolean contains(K key) {
     return map.containsKey(key);
   }
 
+  /**
+   * Gets values.
+   *
+   * @return the values
+   */
   public Collection<V> getValues() {
     return map.values();
   }

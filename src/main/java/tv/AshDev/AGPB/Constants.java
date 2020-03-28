@@ -29,17 +29,50 @@ import java.util.Arrays;
 import java.util.Collection;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
+/**
+ * The type Constants.
+ */
 public class Constants {
 
+  /**
+   * The constant STARTUP.
+   */
   public final static OffsetDateTime STARTUP = OffsetDateTime.now();
+  /**
+   * The constant PREFIX.
+   */
   public final static String PREFIX = "-";
+  /**
+   * The constant SUCCESS.
+   */
   public final static String SUCCESS = "\\uD83D\\uDC4D"; //Thumbs Up
+  /**
+   * The constant WARNING.
+   */
   public final static String WARNING = "\\uD83D\\uDC4E"; //Thumbs Down
+  /**
+   * The constant ERROR.
+   */
   public final static String ERROR = "\\u270B"; //Raised Hand
+  /**
+   * The constant BOT_EMOJI.
+   */
   public final static String BOT_EMOJI = "<:AD_BOT:692774673582129235>";
+  /**
+   * The constant OWNER_ID.
+   */
   public final static String OWNER_ID = "160269653136900096";
+  /**
+   * The constant DEFAULT_CACHE_SIZE.
+   */
   public final static int DEFAULT_CACHE_SIZE = 8000;
+  /**
+   * The constant SERVER_INVITE.
+   */
   public final static String SERVER_INVITE = "https://discord.gg/xMsSev4";
+  /**
+   * The Gateway intents.
+   */
   public final static Collection<GatewayIntent> GATEWAY_INTENTS = Arrays.asList(
       GatewayIntent.GUILD_MEMBERS,
       GatewayIntent.GUILD_EMOJIS,

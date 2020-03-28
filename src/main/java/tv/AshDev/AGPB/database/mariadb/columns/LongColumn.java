@@ -28,27 +28,64 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
+/**
+ * The type Long column.
+ */
 public class LongColumn extends SQLColumn<Long> {
 
+  /**
+   * Instantiates a new Long column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   */
   public LongColumn(String name, boolean nullable, long defaultValue) {
     this(name, nullable, defaultValue, false);
   }
 
+  /**
+   * Instantiates a new Long column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   * @param primaryKey   the primary key
+   */
   public LongColumn(String name, boolean nullable, long defaultValue, boolean primaryKey) {
     super(name, nullable, defaultValue, primaryKey);
   }
 
+  /**
+   * Gets data description.
+   *
+   * @return the data description
+   */
   @Override
   public String getDataDescription() {
     return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable() + (
         primaryKey ? " PRIMARY KEY" : "");
   }
 
+  /**
+   * Gets value.
+   *
+   * @param results the results
+   * @return the value
+   * @throws SQLException the sql exception
+   */
   @Override
   public Long getValue(ResultSet results) throws SQLException {
     return results.getLong(name);
   }
 
+  /**
+   * Update value.
+   *
+   * @param results  the results
+   * @param newValue the new value
+   * @throws SQLException the sql exception
+   */
   @Override
   public void updateValue(ResultSet results, Long newValue) throws SQLException {
     results.updateLong(name, newValue);

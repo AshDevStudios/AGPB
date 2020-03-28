@@ -34,11 +34,25 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The type Database connector.
+ */
 public class DatabaseConnector {
 
   private Connection connection;
+  /**
+   * The constant LOG.
+   */
   protected static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
+  /**
+   * Instantiates a new Database connector.
+   *
+   * @param host     the host
+   * @param user     the user
+   * @param password the password
+   * @throws SQLException the sql exception
+   */
   public DatabaseConnector(String host, String user, String password) throws SQLException {
 
     HikariConfig config = new HikariConfig();
@@ -51,6 +65,9 @@ public class DatabaseConnector {
 
   }
 
+  /**
+   * Init.
+   */
   public final void init() {
 
     try {
@@ -94,10 +111,18 @@ public class DatabaseConnector {
 
   }
 
+  /**
+   * Gets connection.
+   *
+   * @return the connection
+   */
   public final Connection getConnection() {
     return connection;
   }
 
+  /**
+   * Shutdown.
+   */
   public void shutdown() {
     try {
       connection.close();

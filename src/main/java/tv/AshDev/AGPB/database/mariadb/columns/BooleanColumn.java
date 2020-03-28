@@ -28,23 +28,52 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
+/**
+ * The type Boolean column.
+ */
 public class BooleanColumn extends SQLColumn<Boolean> {
 
+  /**
+   * Instantiates a new Boolean column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   */
   public BooleanColumn(String name, boolean nullable, boolean defaultValue) {
     super(name, nullable, defaultValue);
   }
 
+  /**
+   * Gets data description.
+   *
+   * @return the data description
+   */
   @Override
   public String getDataDescription() {
     return "BOOLEAN" + (defaultValue == null ? ""
         : " DEFAULT " + defaultValue.toString().toUpperCase()) + nullable();
   }
 
+  /**
+   * Gets value.
+   *
+   * @param results the results
+   * @return the value
+   * @throws SQLException the sql exception
+   */
   @Override
   public Boolean getValue(ResultSet results) throws SQLException {
     return results.getBoolean(name);
   }
 
+  /**
+   * Update value.
+   *
+   * @param results  the results
+   * @param newValue the new value
+   * @throws SQLException the sql exception
+   */
   @Override
   public void updateValue(ResultSet results, Boolean newValue) throws SQLException {
     results.updateBoolean(name, newValue);

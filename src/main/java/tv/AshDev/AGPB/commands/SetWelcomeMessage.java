@@ -37,6 +37,9 @@ public class SetWelcomeMessage extends Command {
   private static final Logger LOG = LoggerFactory.getLogger(SetWelcomeMessage.class);
 
 
+  /**
+   * Instantiates a new Set welcome message.
+   */
   public SetWelcomeMessage() {
     this.name = "setwelcome";
     this.help = "Set the welcome message new users will get";

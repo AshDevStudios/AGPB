@@ -28,31 +28,70 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
+/**
+ * The type String column.
+ */
 public class StringColumn extends SQLColumn<String> {
 
   private final int maxLength;
 
+  /**
+   * Instantiates a new String column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   * @param maxLength    the max length
+   */
   public StringColumn(String name, boolean nullable, String defaultValue, int maxLength) {
     this(name, nullable, defaultValue, false, maxLength);
   }
 
+  /**
+   * Instantiates a new String column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   * @param publicKey    the public key
+   * @param maxLength    the max length
+   */
   public StringColumn(String name, boolean nullable, String defaultValue, boolean publicKey,
       int maxLength) {
     super(name, nullable, defaultValue, publicKey);
     this.maxLength = maxLength;
   }
 
+  /**
+   * Gets data description.
+   *
+   * @return the data description
+   */
   @Override
   public String getDataDescription() {
     return "VARCHAR(" + maxLength + ")" + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
         + nullable() + (primaryKey ? " PRIMARY KEY" : "");
   }
 
+  /**
+   * Gets value.
+   *
+   * @param results the results
+   * @return the value
+   * @throws SQLException the sql exception
+   */
   @Override
   public String getValue(ResultSet results) throws SQLException {
     return results.getString(name);
   }
 
+  /**
+   * Update value.
+   *
+   * @param results  the results
+   * @param newValue the new value
+   * @throws SQLException the sql exception
+   */
   @Override
   public void updateValue(ResultSet results, String newValue) throws SQLException {
     results.updateString(name, newValue);

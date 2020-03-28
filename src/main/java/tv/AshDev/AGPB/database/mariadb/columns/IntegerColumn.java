@@ -28,22 +28,51 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
+/**
+ * The type Integer column.
+ */
 public class IntegerColumn extends SQLColumn<Integer> {
 
+  /**
+   * Instantiates a new Integer column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   */
   public IntegerColumn(String name, boolean nullable, int defaultValue) {
     super(name, nullable, defaultValue);
   }
 
+  /**
+   * Gets data description.
+   *
+   * @return the data description
+   */
   @Override
   public String getDataDescription() {
     return "INTEGER" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable();
   }
 
+  /**
+   * Gets value.
+   *
+   * @param results the results
+   * @return the value
+   * @throws SQLException the sql exception
+   */
   @Override
   public Integer getValue(ResultSet results) throws SQLException {
     return results.getInt(name);
   }
 
+  /**
+   * Update value.
+   *
+   * @param results  the results
+   * @param newValue the new value
+   * @throws SQLException the sql exception
+   */
   @Override
   public void updateValue(ResultSet results, Integer newValue) throws SQLException {
     results.updateInt(name, newValue);

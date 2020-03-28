@@ -32,8 +32,6 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tv.AshDev.AGPB.settings.BotSettings;
-import tv.AshDev.AGPB.settings.GuildProperties;
 
 /**
  * The type Guild event.
@@ -42,20 +40,8 @@ public class GuildEvent extends ListenerAdapter {
 
   private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
 
-  // The bot settings object initialized in the Main class
-  private final BotSettings botSettings;
-
   /**
    * Constructor for the GuildEvent with the bot settings
-   *
-   * @param botSettings The bot settings form the Main class
-   */
-  public GuildEvent(final BotSettings botSettings) {
-    this.botSettings = botSettings;
-  }
-
-  /**
-   * On guild member join.
    *
    * @param event the event
    */
@@ -68,9 +54,7 @@ public class GuildEvent extends ListenerAdapter {
     User user = event.getUser();
     user.openPrivateChannel().queue(
         privateChannel -> {
-          privateChannel.sendMessageFormat(
-              botSettings.getSettings(guildId).getProperty(GuildProperties.WELCOME_MESSAGE))
-              .queue();
+          privateChannel.sendMessageFormat("Test").queue();
           log.info("Private Message has been sent");
         }
     );
@@ -85,9 +69,6 @@ public class GuildEvent extends ListenerAdapter {
   public void onGuildJoin(GuildJoinEvent event) {
     JDA api = event.getJDA();
     long guildId = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
-    botSettings.createFile(guildId);
-    botSettings.getSettings(guildId)
-        .setProperty(GuildProperties.GUILD_NAME, event.getGuild().getName());
-    botSettings.getSettings(guildId).save();
+
   }
 }

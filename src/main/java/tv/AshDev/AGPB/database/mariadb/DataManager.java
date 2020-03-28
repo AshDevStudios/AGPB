@@ -32,12 +32,21 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The type Data manager.
+ */
 public class DataManager {
 
   private final DatabaseConnector connector;
   private final String tableName;
   private SQLColumn[] columns;
 
+  /**
+   * Instantiates a new Data manager.
+   *
+   * @param connector the connector
+   * @param tableName the table name
+   */
   public DataManager(DatabaseConnector connector, String tableName) {
     this.connector = connector;
     this.tableName = tableName;
@@ -57,10 +66,27 @@ public class DataManager {
     }
   }
 
+  /**
+   * Read t.
+   *
+   * @param <T>   the type parameter
+   * @param query the query
+   * @param rf    the rf
+   * @return the t
+   */
   protected final <T> T read(String query, ResultsFunction<T> rf) {
     return read(query, rf, null);
   }
 
+  /**
+   * Read t.
+   *
+   * @param <T>   the type parameter
+   * @param query the query
+   * @param rf    the rf
+   * @param err   the err
+   * @return the t
+   */
   protected final <T> T read(String query, ResultsFunction<T> rf, T err) {
     try (Statement statement = getConnection().createStatement();
         ResultSet results = statement.executeQuery(query)) {
@@ -71,6 +97,12 @@ public class DataManager {
     }
   }
 
+  /**
+   * Read write.
+   *
+   * @param query the query
+   * @param rc    the rc
+   */
   protected final void readWrite(String query, ResultsConsumer rc) {
     try (Statement statement = getConnection()
         .createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
@@ -81,10 +113,27 @@ public class DataManager {
     }
   }
 
+  /**
+   * Read write t.
+   *
+   * @param <T>   the type parameter
+   * @param query the query
+   * @param rf    the rf
+   * @return the t
+   */
   protected final <T> T readWrite(String query, ResultsFunction<T> rf) {
     return readWrite(query, rf, null);
   }
 
+  /**
+   * Read write t.
+   *
+   * @param <T>   the type parameter
+   * @param query the query
+   * @param rf    the rf
+   * @param err   the err
+   * @return the t
+   */
   protected final <T> T readWrite(String query, ResultsFunction<T> rf, T err) {
     try (Statement statement = getConnection()
         .createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
@@ -96,18 +145,40 @@ public class DataManager {
     }
   }
 
+  /**
+   * Gets table name.
+   *
+   * @return the table name
+   */
   public final String getTableName() {
     return tableName;
   }
 
+  /**
+   * Get columns sql column [ ].
+   *
+   * @return the sql column [ ]
+   */
   public final SQLColumn[] getColumns() {
     return columns.clone();
   }
 
+  /**
+   * Gets connection.
+   *
+   * @return the connection
+   */
   protected final Connection getConnection() {
     return connector.getConnection();
   }
 
+  /**
+   * Select string.
+   *
+   * @param where   the where
+   * @param columns the columns
+   * @return the string
+   */
   protected final String select(String where, SQLColumn... columns) {
     StringBuilder selection = new StringBuilder(columns[0].name);
     for (int i = 1; i < columns.length; i++) {
@@ -116,10 +187,21 @@ public class DataManager {
     return select(where, selection.toString());
   }
 
+  /**
+   * Select all string.
+   *
+   * @param where the where
+   * @return the string
+   */
   protected final String selectAll(String where) {
     return select(where, "*");
   }
 
+  /**
+   * Select all string.
+   *
+   * @return the string
+   */
   protected final String selectAll() {
     return select(null, "*");
   }
@@ -128,20 +210,46 @@ public class DataManager {
     return "SELECT " + columns + " FROM " + tableName + (where == null ? "" : " WHERE " + where);
   }
 
+  /**
+   * Primary key string.
+   *
+   * @return the string
+   */
   public String primaryKey() {
     return null;
   }
 
 
+  /**
+   * The interface Results consumer.
+   */
   @FunctionalInterface
   public interface ResultsConsumer {
 
+    /**
+     * Consume.
+     *
+     * @param results the results
+     * @throws SQLException the sql exception
+     */
     void consume(ResultSet results) throws SQLException;
   }
 
+  /**
+   * The interface Results function.
+   *
+   * @param <T> the type parameter
+   */
   @FunctionalInterface
   public interface ResultsFunction<T> {
 
+    /**
+     * Apply t.
+     *
+     * @param results the results
+     * @return the t
+     * @throws SQLException the sql exception
+     */
     T apply(ResultSet results) throws SQLException;
   }
 

@@ -29,28 +29,65 @@ import java.sql.SQLException;
 import java.time.Instant;
 import tv.AshDev.AGPB.database.mariadb.SQLColumn;
 
+/**
+ * The type Instant column.
+ */
 public class InstantColumn extends SQLColumn<Instant> {
 
+  /**
+   * Instantiates a new Instant column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   */
   public InstantColumn(String name, boolean nullable, Instant defaultValue) {
     this(name, nullable, defaultValue, false);
   }
 
+  /**
+   * Instantiates a new Instant column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   * @param primaryKey   the primary key
+   */
   public InstantColumn(String name, boolean nullable, Instant defaultValue, boolean primaryKey) {
     super(name, nullable, defaultValue, primaryKey);
   }
 
+  /**
+   * Gets data description.
+   *
+   * @return the data description
+   */
   @Override
   public String getDataDescription() {
     return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue.getEpochSecond()) + (
         nullable ? "" : " NOT NULL") + (primaryKey ? " PRIMARY KEY" : "");
   }
 
+  /**
+   * Gets value.
+   *
+   * @param results the results
+   * @return the value
+   * @throws SQLException the sql exception
+   */
   @Override
   public Instant getValue(ResultSet results) throws SQLException {
     long val = results.getLong(name);
     return val == 0 ? null : Instant.ofEpochSecond(val);
   }
 
+  /**
+   * Update value.
+   *
+   * @param results  the results
+   * @param newValue the new value
+   * @throws SQLException the sql exception
+   */
   @Override
   public void updateValue(ResultSet results, Instant newValue) throws SQLException {
     results.updateLong(name, newValue.getEpochSecond());
