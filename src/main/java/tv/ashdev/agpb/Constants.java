@@ -45,15 +45,15 @@ public class Constants {
   /**
    * The constant SUCCESS.
    */
-  public final static String SUCCESS = "\\u1F44D"; //Thumbs Up
+  public final static String SUCCESS = "\uD83D\uDC4D"; //Thumbs Up
   /**
    * The constant WARNING.
    */
-  public final static String WARNING = "\\u1F44E"; //Thumbs Down
+  public final static String WARNING = "\uD83D\uDC4E"; //Thumbs Down
   /**
    * The constant ERROR.
    */
-  public final static String ERROR = "\\u270B"; //Raised Hand
+  public final static String ERROR = "\u270B"; //Raised Hand
   /**
    * The constant BOT_EMOJI.
    */

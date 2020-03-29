@@ -26,29 +26,28 @@ package tv.ashdev.agpb.commands.settings;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import java.time.ZoneId;
 import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
-import tv.ashdev.agpb.database.GuildSettingsDataManager;
 
 /**
- * The type Set welcome message.
+ * The type Timezone cmd.
  */
-public class PrefixCmd extends Command {
+public class TimezoneCmd extends Command {
 
   private final Agpb agpb;
 
-
   /**
-   * Instantiates a new Set welcome message.
+   * Instantiates a new Timezone cmd.
    *
    * @param agpb the agpb
    */
-  public PrefixCmd(Agpb agpb) {
+  public TimezoneCmd(Agpb agpb) {
     this.agpb = agpb;
-    this.name = "prefix";
-    this.help = "Set a custom server prefix.";
+    this.name = "timezone";
+    this.help = "Set the timezone for the bot";
     this.guildOnly = true;
-    this.arguments = "<PREFIX or NONE>";
+    this.arguments = "<TIMEZONE or NONE>";
     this.category = new Category("Settings");
     this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
@@ -60,32 +59,19 @@ public class PrefixCmd extends Command {
    */
   @Override
   protected void execute(CommandEvent event) {
-    if (event.getArgs().isEmpty()) {
-      event.replyError(
-          "Please include a prefix. The server's current prefix can be seen via the `" + event
-              .getClient().getPrefix() + "settings` command");
-      return;
-    }
 
     if (event.getArgs().equalsIgnoreCase("none")) {
-      agpb.getDatabase().getSettings().setPrefix(event.getGuild(), null);
-      event.replySuccess("The server prefix has been reset.");
+      agpb.getDatabase().getSettings().setTimezone(event.getGuild(), null);
+      event.replySuccess("The timezone has been reset.");
       return;
     }
 
-    if (event.getArgs().length() > GuildSettingsDataManager.PREFIX_MAX_LENGTH) {
-      event.replySuccess(
-          "Prefixes cannot be longer than `" + GuildSettingsDataManager.PREFIX_MAX_LENGTH
-              + "` characters.");
-      return;
+    try {
+      ZoneId newzone = ZoneId.of(event.getArgs());
+      agpb.getDatabase().getSettings().setTimezone(event.getGuild(), newzone);
+      event.replySuccess("You have set the Timezone to `" + newzone.getId() + "`");
+    } catch (Exception e) {
+      event.replyError("`" + event.getArgs() + "` is not a valid timezone!");
     }
-
-    agpb.getDatabase().getSettings().setPrefix(event.getGuild(), event.getArgs());
-    event.replySuccess("The server prefix has been set to `" + event.getArgs() + "`\n"
-        + "Note that the default prefix (`"
-        + event.getClient().getPrefix()
-        + "`) cannot be removed and will word in addition to the custom prefix");
-
   }
-
 }

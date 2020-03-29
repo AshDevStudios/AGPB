@@ -119,7 +119,9 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
   public Field getSettingsDisplay(Guild guild) {
     GuildSettings settings = getSettings(guild);
     return new Field(SETTINGS_TITLE,
-        "Prefix: `" + (settings.prefix == null ? Constants.PREFIX : settings.prefix) + "`", true);
+        "Prefix: `" + (settings.prefix == null ? Constants.PREFIX : settings.prefix) + "`\n"
+            + "Timezone: **" + settings.timezone + "**\n"
+            + "Welcome msg: `" + settings.welcome_msg + "`", true);
   }
 
   /**
@@ -201,6 +203,10 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
 
   private void invalidateCache(long guildId) {
     cache.pull(guildId);
+  }
+
+  public String getWelcomeMsg(Guild guild) {
+    return getSettings(guild).welcome_msg;
   }
 
   private static class GuildSettings implements GuildSettingsProvider {

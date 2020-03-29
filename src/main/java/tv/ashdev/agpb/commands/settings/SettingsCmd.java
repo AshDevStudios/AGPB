@@ -26,29 +26,29 @@ package tv.ashdev.agpb.commands.settings;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
-import tv.ashdev.agpb.database.GuildSettingsDataManager;
+import tv.ashdev.agpb.utils.FormatUtil;
 
 /**
- * The type Set welcome message.
+ * The type Settings cmd.
  */
-public class PrefixCmd extends Command {
+public class SettingsCmd extends Command {
 
-  private final Agpb agpb;
-
+  private Agpb agpb;
 
   /**
-   * Instantiates a new Set welcome message.
+   * Instantiates a new Settings cmd.
    *
    * @param agpb the agpb
    */
-  public PrefixCmd(Agpb agpb) {
+  public SettingsCmd(Agpb agpb) {
     this.agpb = agpb;
-    this.name = "prefix";
-    this.help = "Set a custom server prefix.";
+    this.name = "settings";
+    this.help = "Shows current settings for your server";
     this.guildOnly = true;
-    this.arguments = "<PREFIX or NONE>";
     this.category = new Category("Settings");
     this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
@@ -60,32 +60,15 @@ public class PrefixCmd extends Command {
    */
   @Override
   protected void execute(CommandEvent event) {
-    if (event.getArgs().isEmpty()) {
-      event.replyError(
-          "Please include a prefix. The server's current prefix can be seen via the `" + event
-              .getClient().getPrefix() + "settings` command");
-      return;
-    }
 
-    if (event.getArgs().equalsIgnoreCase("none")) {
-      agpb.getDatabase().getSettings().setPrefix(event.getGuild(), null);
-      event.replySuccess("The server prefix has been reset.");
-      return;
-    }
-
-    if (event.getArgs().length() > GuildSettingsDataManager.PREFIX_MAX_LENGTH) {
-      event.replySuccess(
-          "Prefixes cannot be longer than `" + GuildSettingsDataManager.PREFIX_MAX_LENGTH
-              + "` characters.");
-      return;
-    }
-
-    agpb.getDatabase().getSettings().setPrefix(event.getGuild(), event.getArgs());
-    event.replySuccess("The server prefix has been set to `" + event.getArgs() + "`\n"
-        + "Note that the default prefix (`"
-        + event.getClient().getPrefix()
-        + "`) cannot be removed and will word in addition to the custom prefix");
+    event.getChannel().sendMessage(new MessageBuilder()
+        .append(FormatUtil.filterEveryone(
+            "**" + event.getSelfUser().getName() + "** settings on **" + event.getGuild().getName()
+                + "**:"))
+        .setEmbed(new EmbedBuilder()
+            .addField(agpb.getDatabase().getSettings().getSettingsDisplay(event.getGuild()))
+            .setColor(event.getSelfMember().getColor())
+            .build()).build()).queue();
 
   }
-
 }

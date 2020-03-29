@@ -33,6 +33,9 @@ import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tv.ashdev.agpb.commands.settings.PrefixCmd;
+import tv.ashdev.agpb.commands.settings.SettingsCmd;
+import tv.ashdev.agpb.commands.settings.TimezoneCmd;
+import tv.ashdev.agpb.commands.settings.WelcomeMsgCmd;
 import tv.ashdev.agpb.data.BotToken;
 import tv.ashdev.agpb.database.Database;
 import tv.ashdev.agpb.listeners.GuildEvent;
@@ -64,20 +67,28 @@ public class Agpb {
         .setOwnerId(Constants.OWNER_ID)
         .setEmojis(Constants.SUCCESS, Constants.WARNING, Constants.ERROR)
         .setServerInvite(Constants.SERVER_INVITE)
-        .setGuildSettingsManager(database.settings)
+        .setGuildSettingsManager(database.getSettings())
         .addCommands(
-            new PrefixCmd(this)
+            new PrefixCmd(this),
+            new TimezoneCmd(this),
+            new SettingsCmd(this),
+            new WelcomeMsgCmd(this)
         );
 
     JDA api = JDABuilder.create(Constants.GATEWAY_INTENTS)
         .setToken(botToken.getToken())
-        .addEventListeners(waiter, bot.build(), new GuildEvent())
+        .addEventListeners(waiter, bot.build(), new GuildEvent(this))
         .build();
     api.awaitReady();
     LOG.info("Finished Building JDA!");
 
   }
 
+  /**
+   * Gets database.
+   *
+   * @return the database
+   */
   public Database getDatabase() {
     return database;
   }

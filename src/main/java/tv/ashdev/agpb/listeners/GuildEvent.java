@@ -24,21 +24,30 @@
 
 package tv.ashdev.agpb.listeners;
 
-import java.util.Objects;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.ashdev.agpb.Agpb;
 
 /**
  * The type Guild event.
  */
 public class GuildEvent extends ListenerAdapter {
 
-  private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GuildEvent.class);
+
+  private Agpb agpb;
+
+  /**
+   * Instantiates a new Guild event.
+   *
+   * @param agpb the agpb
+   */
+  public GuildEvent(Agpb agpb) {
+    this.agpb = agpb;
+  }
 
   /**
    * Constructor for the GuildEvent with the bot settings
@@ -47,28 +56,12 @@ public class GuildEvent extends ListenerAdapter {
    */
   @Override
   public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-    // The guild ID
-    final long guildId = event.getGuild().getIdLong();
-
-    log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
+    String msg = agpb.getDatabase().getSettings().getWelcomeMsg(event.getGuild());
     User user = event.getUser();
     user.openPrivateChannel().queue(
         privateChannel -> {
-          privateChannel.sendMessageFormat("Test").queue();
-          log.info("Private Message has been sent");
+          privateChannel.sendMessageFormat(msg).queue();
         }
     );
-  }
-
-  /**
-   * On guild join.
-   *
-   * @param event the event
-   */
-  @Override
-  public void onGuildJoin(GuildJoinEvent event) {
-    JDA api = event.getJDA();
-    long guildId = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
-
   }
 }

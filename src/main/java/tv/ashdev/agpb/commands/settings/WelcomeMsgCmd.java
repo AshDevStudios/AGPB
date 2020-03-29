@@ -22,39 +22,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.ashdev.agpb.database;
+package tv.ashdev.agpb.commands.settings;
 
-import java.sql.SQLException;
-import tv.ashdev.agpb.database.mariadb.DatabaseConnector;
+import com.jagrosh.jdautilities.command.Command;
+import com.jagrosh.jdautilities.command.CommandEvent;
+import net.dv8tion.jda.api.Permission;
+import tv.ashdev.agpb.Agpb;
 
 /**
- * The type Database.
+ * The type Welcome msg cmd.
  */
-public class Database extends DatabaseConnector {
+public class WelcomeMsgCmd extends Command {
+
+  private final Agpb agpb;
 
   /**
-   * The Settings.
-   */
-  private final GuildSettingsDataManager settings;
-
-  /**
-   * Instantiates a new Database.
+   * Instantiates a new Welcome msg cmd.
    *
-   * @param host     the host
-   * @param user     the user
-   * @param password the password
-   * @throws SQLException the sql exception
+   * @param agpb the agpb
    */
-  public Database(String host, String user, String password) throws SQLException {
-    super(host, user, password);
-
-    settings = new GuildSettingsDataManager(this);
-
-    init();
-
+  public WelcomeMsgCmd(Agpb agpb) {
+    this.agpb = agpb;
+    this.name = "welcomemsg";
+    this.help = "Set welcome message for new users";
+    this.arguments = "<MESSAGE or NONE>";
+    this.guildOnly = true;
+    this.category = new Category("Settings");
+    this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
 
-  public GuildSettingsDataManager getSettings() {
-    return settings;
+  /**
+   * Execute.
+   *
+   * @param event the event
+   */
+  @Override
+  protected void execute(CommandEvent event) {
+
+    if (event.getArgs().equalsIgnoreCase("none")) {
+      agpb.getDatabase().getSettings().setWelcomeMsg(event.getGuild(), null);
+      event.replySuccess("The welcome message command has been reset");
+      return;
+    }
+
+    agpb.getDatabase().getSettings().setWelcomeMsg(event.getGuild(), event.getArgs());
+    event.replySuccess("The new welcome message has been set!");
+
   }
 }
