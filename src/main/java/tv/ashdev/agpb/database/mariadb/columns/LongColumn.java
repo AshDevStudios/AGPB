@@ -22,26 +22,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb.columns;
+package tv.ashdev.agpb.database.mariadb.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
 
 /**
- * The type Boolean column.
+ * The type Long column.
  */
-public class BooleanColumn extends SQLColumn<Boolean> {
+public class LongColumn extends SQLColumn<Long> {
 
   /**
-   * Instantiates a new Boolean column.
+   * Instantiates a new Long column.
    *
    * @param name         the name
    * @param nullable     the nullable
    * @param defaultValue the default value
    */
-  public BooleanColumn(String name, boolean nullable, boolean defaultValue) {
-    super(name, nullable, defaultValue);
+  public LongColumn(String name, boolean nullable, long defaultValue) {
+    this(name, nullable, defaultValue, false);
+  }
+
+  /**
+   * Instantiates a new Long column.
+   *
+   * @param name         the name
+   * @param nullable     the nullable
+   * @param defaultValue the default value
+   * @param primaryKey   the primary key
+   */
+  public LongColumn(String name, boolean nullable, long defaultValue, boolean primaryKey) {
+    super(name, nullable, defaultValue, primaryKey);
   }
 
   /**
@@ -51,8 +63,8 @@ public class BooleanColumn extends SQLColumn<Boolean> {
    */
   @Override
   public String getDataDescription() {
-    return "BOOLEAN" + (defaultValue == null ? ""
-        : " DEFAULT " + defaultValue.toString().toUpperCase()) + nullable();
+    return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable() + (
+        primaryKey ? " PRIMARY KEY" : "");
   }
 
   /**
@@ -63,8 +75,8 @@ public class BooleanColumn extends SQLColumn<Boolean> {
    * @throws SQLException the sql exception
    */
   @Override
-  public Boolean getValue(ResultSet results) throws SQLException {
-    return results.getBoolean(name);
+  public Long getValue(ResultSet results) throws SQLException {
+    return results.getLong(name);
   }
 
   /**
@@ -75,8 +87,8 @@ public class BooleanColumn extends SQLColumn<Boolean> {
    * @throws SQLException the sql exception
    */
   @Override
-  public void updateValue(ResultSet results, Boolean newValue) throws SQLException {
-    results.updateBoolean(name, newValue);
+  public void updateValue(ResultSet results, Long newValue) throws SQLException {
+    results.updateLong(name, newValue);
   }
 
 }

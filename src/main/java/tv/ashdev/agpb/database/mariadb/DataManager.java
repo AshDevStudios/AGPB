@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb;
+package tv.ashdev.agpb.database.mariadb;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -39,7 +39,7 @@ public class DataManager {
 
   private final DatabaseConnector connector;
   private final String tableName;
-  private SQLColumn[] columns;
+  private final SQLColumn[] columns;
 
   /**
    * Instantiates a new Data manager.

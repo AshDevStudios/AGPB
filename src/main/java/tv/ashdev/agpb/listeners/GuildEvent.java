@@ -22,43 +22,53 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.commands;
+package tv.ashdev.agpb.listeners;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import java.util.Objects;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The type Set welcome message.
+ * The type Guild event.
  */
-public class SetWelcomeMessage extends Command {
+public class GuildEvent extends ListenerAdapter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SetWelcomeMessage.class);
-
-
-  /**
-   * Instantiates a new Set welcome message.
-   */
-  public SetWelcomeMessage() {
-    this.name = "setwelcome";
-    this.help = "Set the welcome message new users will get";
-    this.guildOnly = true;
-    this.arguments = "[message]";
-  }
+  private static final Logger log = LoggerFactory.getLogger(GuildEvent.class);
 
   /**
-   * Execute.
+   * Constructor for the GuildEvent with the bot settings
    *
    * @param event the event
    */
   @Override
-  protected void execute(CommandEvent event) {
-    // Getting the guild ID
+  public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+    // The guild ID
     final long guildId = event.getGuild().getIdLong();
-    String msg = event.getArgs().trim();
-    // TODO: 28/03/2020
-    //  Add database code here to get welcome message.
+
+    log.info("{} has joined: {}", event.getUser().getName(), event.getGuild().getName());
+    User user = event.getUser();
+    user.openPrivateChannel().queue(
+        privateChannel -> {
+          privateChannel.sendMessageFormat("Test").queue();
+          log.info("Private Message has been sent");
+        }
+    );
   }
 
+  /**
+   * On guild join.
+   *
+   * @param event the event
+   */
+  @Override
+  public void onGuildJoin(GuildJoinEvent event) {
+    JDA api = event.getJDA();
+    long guildId = Objects.requireNonNull(api.getGuildById(event.getGuild().getId())).getIdLong();
+
+  }
 }

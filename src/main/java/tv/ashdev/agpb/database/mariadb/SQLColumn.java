@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb;
+package tv.ashdev.agpb.database.mariadb;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

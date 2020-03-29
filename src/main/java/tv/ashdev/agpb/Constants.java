@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB;
+package tv.ashdev.agpb;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -45,11 +45,11 @@ public class Constants {
   /**
    * The constant SUCCESS.
    */
-  public final static String SUCCESS = "\\uD83D\\uDC4D"; //Thumbs Up
+  public final static String SUCCESS = "\\u1F44D"; //Thumbs Up
   /**
    * The constant WARNING.
    */
-  public final static String WARNING = "\\uD83D\\uDC4E"; //Thumbs Down
+  public final static String WARNING = "\\u1F44E"; //Thumbs Down
   /**
    * The constant ERROR.
    */

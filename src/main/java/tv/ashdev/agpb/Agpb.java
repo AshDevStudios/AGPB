@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB;
+package tv.ashdev.agpb;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -32,17 +32,17 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tv.AshDev.AGPB.commands.SetWelcomeMessage;
-import tv.AshDev.AGPB.data.BotToken;
-import tv.AshDev.AGPB.database.Database;
-import tv.AshDev.AGPB.listeners.GuildEvent;
+import tv.ashdev.agpb.commands.settings.PrefixCmd;
+import tv.ashdev.agpb.data.BotToken;
+import tv.ashdev.agpb.database.Database;
+import tv.ashdev.agpb.listeners.GuildEvent;
 
 /**
  * The type Main.
  */
-public class Main {
+public class Agpb {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Agpb.class);
   private final BotToken botToken;
   private final Database database;
 
@@ -51,7 +51,7 @@ public class Main {
    *
    * @throws Exception the exception
    */
-  public Main() throws Exception {
+  public Agpb() throws Exception {
 
     botToken = new BotToken();
     database = new Database("localhost:3306/AGPB", "root", "root");
@@ -66,7 +66,7 @@ public class Main {
         .setServerInvite(Constants.SERVER_INVITE)
         .setGuildSettingsManager(database.settings)
         .addCommands(
-            new SetWelcomeMessage()
+            new PrefixCmd(this)
         );
 
     JDA api = JDABuilder.create(Constants.GATEWAY_INTENTS)
@@ -78,6 +78,10 @@ public class Main {
 
   }
 
+  public Database getDatabase() {
+    return database;
+  }
+
   /**
    * The entry point of application.
    *
@@ -86,7 +90,7 @@ public class Main {
    */
   public static void main(String[] args) throws Exception {
     // Instantiating the bot settings here so it can be used on every class you need
-    new Main();
+    new Agpb();
 
   }
 

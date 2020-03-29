@@ -22,39 +22,44 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb.columns;
+package tv.ashdev.agpb.database.mariadb.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
 
 /**
- * The type Instant column.
+ * The type String column.
  */
-public class InstantColumn extends SQLColumn<Instant> {
+public class StringColumn extends SQLColumn<String> {
+
+  private final int maxLength;
 
   /**
-   * Instantiates a new Instant column.
+   * Instantiates a new String column.
    *
    * @param name         the name
    * @param nullable     the nullable
    * @param defaultValue the default value
+   * @param maxLength    the max length
    */
-  public InstantColumn(String name, boolean nullable, Instant defaultValue) {
-    this(name, nullable, defaultValue, false);
+  public StringColumn(String name, boolean nullable, String defaultValue, int maxLength) {
+    this(name, nullable, defaultValue, false, maxLength);
   }
 
   /**
-   * Instantiates a new Instant column.
+   * Instantiates a new String column.
    *
    * @param name         the name
    * @param nullable     the nullable
    * @param defaultValue the default value
-   * @param primaryKey   the primary key
+   * @param publicKey    the public key
+   * @param maxLength    the max length
    */
-  public InstantColumn(String name, boolean nullable, Instant defaultValue, boolean primaryKey) {
-    super(name, nullable, defaultValue, primaryKey);
+  public StringColumn(String name, boolean nullable, String defaultValue, boolean publicKey,
+      int maxLength) {
+    super(name, nullable, defaultValue, publicKey);
+    this.maxLength = maxLength;
   }
 
   /**
@@ -64,8 +69,8 @@ public class InstantColumn extends SQLColumn<Instant> {
    */
   @Override
   public String getDataDescription() {
-    return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue.getEpochSecond()) + (
-        nullable ? "" : " NOT NULL") + (primaryKey ? " PRIMARY KEY" : "");
+    return "VARCHAR(" + maxLength + ")" + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
+        + nullable() + (primaryKey ? " PRIMARY KEY" : "");
   }
 
   /**
@@ -76,9 +81,8 @@ public class InstantColumn extends SQLColumn<Instant> {
    * @throws SQLException the sql exception
    */
   @Override
-  public Instant getValue(ResultSet results) throws SQLException {
-    long val = results.getLong(name);
-    return val == 0 ? null : Instant.ofEpochSecond(val);
+  public String getValue(ResultSet results) throws SQLException {
+    return results.getString(name);
   }
 
   /**
@@ -89,8 +93,7 @@ public class InstantColumn extends SQLColumn<Instant> {
    * @throws SQLException the sql exception
    */
   @Override
-  public void updateValue(ResultSet results, Instant newValue) throws SQLException {
-    results.updateLong(name, newValue.getEpochSecond());
+  public void updateValue(ResultSet results, String newValue) throws SQLException {
+    results.updateString(name, newValue);
   }
-
 }

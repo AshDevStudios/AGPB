@@ -22,38 +22,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb.columns;
+package tv.ashdev.agpb.database.mariadb.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
 
 /**
- * The type Long column.
+ * The type Integer column.
  */
-public class LongColumn extends SQLColumn<Long> {
+public class IntegerColumn extends SQLColumn<Integer> {
 
   /**
-   * Instantiates a new Long column.
+   * Instantiates a new Integer column.
    *
    * @param name         the name
    * @param nullable     the nullable
    * @param defaultValue the default value
    */
-  public LongColumn(String name, boolean nullable, long defaultValue) {
-    this(name, nullable, defaultValue, false);
-  }
-
-  /**
-   * Instantiates a new Long column.
-   *
-   * @param name         the name
-   * @param nullable     the nullable
-   * @param defaultValue the default value
-   * @param primaryKey   the primary key
-   */
-  public LongColumn(String name, boolean nullable, long defaultValue, boolean primaryKey) {
-    super(name, nullable, defaultValue, primaryKey);
+  public IntegerColumn(String name, boolean nullable, int defaultValue) {
+    super(name, nullable, defaultValue);
   }
 
   /**
@@ -63,8 +51,7 @@ public class LongColumn extends SQLColumn<Long> {
    */
   @Override
   public String getDataDescription() {
-    return "BIGINT" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable() + (
-        primaryKey ? " PRIMARY KEY" : "");
+    return "INTEGER" + (defaultValue == null ? "" : " DEFAULT " + defaultValue) + nullable();
   }
 
   /**
@@ -75,8 +62,8 @@ public class LongColumn extends SQLColumn<Long> {
    * @throws SQLException the sql exception
    */
   @Override
-  public Long getValue(ResultSet results) throws SQLException {
-    return results.getLong(name);
+  public Integer getValue(ResultSet results) throws SQLException {
+    return results.getInt(name);
   }
 
   /**
@@ -87,8 +74,8 @@ public class LongColumn extends SQLColumn<Long> {
    * @throws SQLException the sql exception
    */
   @Override
-  public void updateValue(ResultSet results, Long newValue) throws SQLException {
-    results.updateLong(name, newValue);
+  public void updateValue(ResultSet results, Integer newValue) throws SQLException {
+    results.updateInt(name, newValue);
   }
 
 }

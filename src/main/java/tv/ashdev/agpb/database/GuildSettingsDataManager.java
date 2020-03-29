@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database;
+package tv.ashdev.agpb.database;
 
 import com.jagrosh.jdautilities.command.GuildSettingsManager;
 import com.jagrosh.jdautilities.command.GuildSettingsProvider;
@@ -35,20 +35,20 @@ import java.util.Collections;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import org.jetbrains.annotations.NotNull;
-import tv.AshDev.AGPB.Constants;
-import tv.AshDev.AGPB.database.mariadb.DataManager;
-import tv.AshDev.AGPB.database.mariadb.DatabaseConnector;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
-import tv.AshDev.AGPB.database.mariadb.columns.LongColumn;
-import tv.AshDev.AGPB.database.mariadb.columns.StringColumn;
-import tv.AshDev.AGPB.utils.FixedCache;
+import tv.ashdev.agpb.Constants;
+import tv.ashdev.agpb.database.mariadb.DataManager;
+import tv.ashdev.agpb.database.mariadb.DatabaseConnector;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.columns.LongColumn;
+import tv.ashdev.agpb.database.mariadb.columns.StringColumn;
+import tv.ashdev.agpb.utils.FixedCache;
 
 /**
  * The type Guild settings data manager.
  */
 public class GuildSettingsDataManager extends DataManager implements GuildSettingsManager {
 
-  private static final int PREFIX_MAX_LENGTH = 20;
+  public static final int PREFIX_MAX_LENGTH = 20;
   private static final ZoneId DEFAULT_TIMEZONE = ZoneId.of("UTC+10");
   private static final String SETTINGS_TITLE = "\uD83D\uDCCA Server Settings"; // 📊
 

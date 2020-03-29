@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.utils;
+package tv.ashdev.agpb.utils;
 
 import java.util.Collection;
 import java.util.HashMap;

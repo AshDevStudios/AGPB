@@ -22,10 +22,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database;
+package tv.ashdev.agpb.database;
 
 import java.sql.SQLException;
-import tv.AshDev.AGPB.database.mariadb.DatabaseConnector;
+import tv.ashdev.agpb.database.mariadb.DatabaseConnector;
 
 /**
  * The type Database.

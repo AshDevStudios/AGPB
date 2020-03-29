@@ -22,44 +22,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb.columns;
+package tv.ashdev.agpb.database.mariadb.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
 
 /**
- * The type String column.
+ * The type Boolean column.
  */
-public class StringColumn extends SQLColumn<String> {
-
-  private final int maxLength;
+public class BooleanColumn extends SQLColumn<Boolean> {
 
   /**
-   * Instantiates a new String column.
+   * Instantiates a new Boolean column.
    *
    * @param name         the name
    * @param nullable     the nullable
    * @param defaultValue the default value
-   * @param maxLength    the max length
    */
-  public StringColumn(String name, boolean nullable, String defaultValue, int maxLength) {
-    this(name, nullable, defaultValue, false, maxLength);
-  }
-
-  /**
-   * Instantiates a new String column.
-   *
-   * @param name         the name
-   * @param nullable     the nullable
-   * @param defaultValue the default value
-   * @param publicKey    the public key
-   * @param maxLength    the max length
-   */
-  public StringColumn(String name, boolean nullable, String defaultValue, boolean publicKey,
-      int maxLength) {
-    super(name, nullable, defaultValue, publicKey);
-    this.maxLength = maxLength;
+  public BooleanColumn(String name, boolean nullable, boolean defaultValue) {
+    super(name, nullable, defaultValue);
   }
 
   /**
@@ -69,8 +51,8 @@ public class StringColumn extends SQLColumn<String> {
    */
   @Override
   public String getDataDescription() {
-    return "VARCHAR(" + maxLength + ")" + (defaultValue == null ? "" : " DEFAULT " + defaultValue)
-        + nullable() + (primaryKey ? " PRIMARY KEY" : "");
+    return "BOOLEAN" + (defaultValue == null ? ""
+        : " DEFAULT " + defaultValue.toString().toUpperCase()) + nullable();
   }
 
   /**
@@ -81,8 +63,8 @@ public class StringColumn extends SQLColumn<String> {
    * @throws SQLException the sql exception
    */
   @Override
-  public String getValue(ResultSet results) throws SQLException {
-    return results.getString(name);
+  public Boolean getValue(ResultSet results) throws SQLException {
+    return results.getBoolean(name);
   }
 
   /**
@@ -93,7 +75,8 @@ public class StringColumn extends SQLColumn<String> {
    * @throws SQLException the sql exception
    */
   @Override
-  public void updateValue(ResultSet results, String newValue) throws SQLException {
-    results.updateString(name, newValue);
+  public void updateValue(ResultSet results, Boolean newValue) throws SQLException {
+    results.updateBoolean(name, newValue);
   }
+
 }

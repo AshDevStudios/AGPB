@@ -22,12 +22,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb.columns;
+package tv.ashdev.agpb.database.mariadb.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
-import tv.AshDev.AGPB.database.mariadb.SQLColumn;
+import tv.ashdev.agpb.database.mariadb.SQLColumn;
 
 /**
  * The type Instant milli column.

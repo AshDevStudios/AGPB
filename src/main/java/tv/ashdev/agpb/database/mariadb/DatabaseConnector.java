@@ -22,7 +22,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.AshDev.AGPB.database.mariadb;
+package tv.ashdev.agpb.database.mariadb;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -69,7 +69,6 @@ public class DatabaseConnector {
    * Init.
    */
   public final void init() {
-
     try {
       for (Field field : this.getClass().getFields()) {
         if (field.get(this).getClass().getSuperclass() == DataManager.class) {
@@ -80,15 +79,19 @@ public class DatabaseConnector {
             Statement s = connection
                 .createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             s.closeOnCompletion();
-            String str =
-                manager.getColumns()[0].name + " " + manager.getColumns()[0].getDataDescription();
+            StringBuilder strBuilder = new StringBuilder(
+                manager.getColumns()[0].name + " " + manager.getColumns()[0].getDataDescription());
             for (int i = 1; i < manager.getColumns().length; i++) {
-              str += ", \"" + manager.getColumns()[i].name + "\" " + manager.getColumns()[i]
-                  .getDataDescription();
+              strBuilder.append(", ").append(manager.getColumns()[i].name).append(" ")
+                  .append(manager.getColumns()[i]
+                      .getDataDescription());
             }
+            String str =
+                strBuilder.toString();
             if (manager.primaryKey() != null) {
               str += ", PRIMARY KEY (" + manager.primaryKey() + ")";
             }
+            LOG.info(str);
             s.execute("CREATE TABLE " + manager.getTableName() + "(" + str + ")");
           }
           for (SQLColumn col : manager.getColumns()) {
@@ -106,9 +109,9 @@ public class DatabaseConnector {
         }
       }
     } catch (SQLException | IllegalAccessException e) {
-      LOG.error("Failed to initialize: " + e);
+      LOG.error("Failed to initialize");
+      e.printStackTrace();
     }
-
   }
 
   /**
