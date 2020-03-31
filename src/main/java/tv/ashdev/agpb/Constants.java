@@ -24,9 +24,11 @@
 
 package tv.ashdev.agpb;
 
+import com.jagrosh.jdautilities.command.Command.Category;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 /**
@@ -86,6 +88,13 @@ public class Constants {
       GatewayIntent.GUILD_MESSAGE_TYPING,
       GatewayIntent.GUILD_MESSAGES,
       GatewayIntent.GUILD_VOICE_STATES
+  );
+
+  public final static List<Category> CATEGORIES = Arrays.asList(
+      new Category("GLOBAL"), // 0
+      new Category("ADMIN"), // 1
+      new Category("MODERATOR"), // 2
+      new Category("SETTINGS") // 3
   );
 
 

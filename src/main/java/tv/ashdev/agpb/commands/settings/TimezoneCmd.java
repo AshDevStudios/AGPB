@@ -29,6 +29,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import java.time.ZoneId;
 import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
+import tv.ashdev.agpb.Constants;
 
 /**
  * The type Timezone cmd.
@@ -48,7 +49,7 @@ public class TimezoneCmd extends Command {
     this.help = "Set the timezone for the bot";
     this.guildOnly = true;
     this.arguments = "<TIMEZONE or NONE>";
-    this.category = new Category("Settings");
+    this.category = Constants.CATEGORIES.get(3);
     this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
 

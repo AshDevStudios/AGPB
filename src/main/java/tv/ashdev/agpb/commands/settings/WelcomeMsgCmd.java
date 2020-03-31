@@ -28,6 +28,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
+import tv.ashdev.agpb.Constants;
 
 /**
  * The type Welcome msg cmd.
@@ -47,7 +48,7 @@ public class WelcomeMsgCmd extends Command {
     this.help = "Set welcome message for new users";
     this.arguments = "<MESSAGE or NONE>";
     this.guildOnly = true;
-    this.category = new Category("Settings");
+    this.category = Constants.CATEGORIES.get(3);
     this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
 

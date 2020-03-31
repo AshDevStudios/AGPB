@@ -205,6 +205,10 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
     cache.pull(guildId);
   }
 
+  public ZoneId getTimeZone(Guild guild) {
+    return getSettings(guild).timezone;
+  }
+
   public String getWelcomeMsg(Guild guild) {
     return getSettings(guild).welcome_msg;
   }

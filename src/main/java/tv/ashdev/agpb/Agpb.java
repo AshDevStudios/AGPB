@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.ashdev.agpb.commands.global.SuggestionCmd;
 import tv.ashdev.agpb.commands.settings.PrefixCmd;
 import tv.ashdev.agpb.commands.settings.SettingsCmd;
 import tv.ashdev.agpb.commands.settings.TimezoneCmd;
@@ -46,7 +47,6 @@ import tv.ashdev.agpb.listeners.GuildEvent;
 public class Agpb {
 
   private static final Logger LOG = LoggerFactory.getLogger(Agpb.class);
-  private final BotToken botToken;
   private final Database database;
 
   /**
@@ -56,7 +56,7 @@ public class Agpb {
    */
   public Agpb() throws Exception {
 
-    botToken = new BotToken();
+    BotToken botToken = new BotToken();
     database = new Database("localhost:3306/AGPB", "root", "root");
 
     EventWaiter waiter = new EventWaiter();
@@ -69,9 +69,17 @@ public class Agpb {
         .setServerInvite(Constants.SERVER_INVITE)
         .setGuildSettingsManager(database.getSettings())
         .addCommands(
+            // GLOBAL COMMANDS
+            new SuggestionCmd(this),
+
+            // ADMIN COMMANDS
+
+            // MODERATOR COMMANDS
+
+            //SETTINGS COMMANDS
             new PrefixCmd(this),
-            new TimezoneCmd(this),
             new SettingsCmd(this),
+            new TimezoneCmd(this),
             new WelcomeMsgCmd(this)
         );
 

@@ -28,6 +28,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
+import tv.ashdev.agpb.Constants;
 import tv.ashdev.agpb.database.GuildSettingsDataManager;
 
 /**
@@ -49,7 +50,7 @@ public class PrefixCmd extends Command {
     this.help = "Set a custom server prefix.";
     this.guildOnly = true;
     this.arguments = "<PREFIX or NONE>";
-    this.category = new Category("Settings");
+    this.category = Constants.CATEGORIES.get(3);
     this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
   }
 
