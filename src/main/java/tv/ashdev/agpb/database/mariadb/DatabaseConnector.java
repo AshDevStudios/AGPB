@@ -102,7 +102,8 @@ public class DatabaseConnector {
                   .createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
               st.closeOnCompletion();
               st.execute(
-                  "ALTER TABLE " + manager.getTableName() + " ADD \"" + col.name + "\" " + col
+                  "ALTER TABLE " + manager.getTableName() + " ADD COLUMN IF NOT EXISTS " + col.name
+                      + " " + col
                       .getDataDescription());
             }
           }

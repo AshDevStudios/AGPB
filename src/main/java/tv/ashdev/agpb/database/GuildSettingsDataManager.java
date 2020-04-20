@@ -48,6 +48,9 @@ import tv.ashdev.agpb.utils.FixedCache;
  */
 public class GuildSettingsDataManager extends DataManager implements GuildSettingsManager {
 
+  /**
+   * The constant PREFIX_MAX_LENGTH.
+   */
   public static final int PREFIX_MAX_LENGTH = 20;
   private static final ZoneId DEFAULT_TIMEZONE = ZoneId.of("UTC+10");
   private static final String SETTINGS_TITLE = "\uD83D\uDCCA Server Settings"; // 📊
@@ -76,6 +79,20 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
    */
   public final static SQLColumn<String> WELCOME_MSG = new StringColumn(
       "WELCOME_MSG", true, null, 255
+  );
+
+  /**
+   * The constant STREAM_TEAM.
+   */
+  public final static SQLColumn<String> STREAM_TEAM = new StringColumn(
+      "STREAM_TEAM", true, null, 50
+  );
+
+  /**
+   * The constant CLIPS_CHANNEL.
+   */
+  public final static SQLColumn<String> CLIPS_CHANNEL = new StringColumn(
+      "CLIPS_CHANNEL", true, null, 255
   );
 
   // Cache
@@ -197,6 +214,47 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
     });
   }
 
+  /**
+   * Sets stream team.
+   *
+   * @param guild the guild
+   * @param team  the team
+   */
+  public void setStreamTeam(Guild guild, String team) {
+    invalidateCache(guild);
+    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, STREAM_TEAM), rs -> {
+      if (rs.next()) {
+        STREAM_TEAM.updateValue(rs, team);
+        rs.updateRow();
+      } else {
+        rs.moveToInsertRow();
+        GUILD_ID.updateValue(rs, guild.getIdLong());
+        STREAM_TEAM.updateValue(rs, team);
+        rs.insertRow();
+      }
+    });
+  }
+
+  /**
+   * Sets clips channel.
+   *
+   * @param guild the guild
+   */
+  public void setClipsChannel(Guild guild, String channelId) {
+    invalidateCache(guild);
+    readWrite(select(GUILD_ID.is(guild.getIdLong()), GUILD_ID, CLIPS_CHANNEL), rs -> {
+      if (rs.next()) {
+        CLIPS_CHANNEL.updateValue(rs, channelId);
+        rs.updateRow();
+      } else {
+        rs.moveToInsertRow();
+        GUILD_ID.updateValue(rs, guild.getIdLong());
+        CLIPS_CHANNEL.updateValue(rs, channelId);
+        rs.insertRow();
+      }
+    });
+  }
+
   private void invalidateCache(Guild guild) {
     invalidateCache(guild.getIdLong());
   }
@@ -205,12 +263,43 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
     cache.pull(guildId);
   }
 
+  /**
+   * Gets time zone.
+   *
+   * @param guild the guild
+   * @return the time zone
+   */
   public ZoneId getTimeZone(Guild guild) {
     return getSettings(guild).timezone;
   }
 
+  /**
+   * Gets welcome msg.
+   *
+   * @param guild the guild
+   * @return the welcome msg
+   */
   public String getWelcomeMsg(Guild guild) {
     return getSettings(guild).welcome_msg;
+  }
+
+  /**
+   * Gets stream team.
+   *
+   * @param guild the guild
+   * @return the stream team
+   */
+  public String getStreamTeam(Guild guild) {
+    return getSettings(guild).stream_team;
+  }
+
+  /**
+   * Gets clips channel.
+   *
+   * @return the clips channel
+   */
+  public String getClipsChannel(Guild guild) {
+    return getSettings(guild).clips_channel_id;
   }
 
   private static class GuildSettings implements GuildSettingsProvider {
@@ -218,18 +307,24 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
     private final String prefix;
     private final ZoneId timezone;
     private final String welcome_msg;
+    private final String stream_team;
+    private final String clips_channel_id;
 
 
     private GuildSettings() {
       this.prefix = null;
       this.timezone = DEFAULT_TIMEZONE;
       this.welcome_msg = null;
+      this.stream_team = null;
+      this.clips_channel_id = null;
 
     }
 
     private GuildSettings(ResultSet rs) throws SQLException {
       this.prefix = PREFIX.getValue(rs);
       this.welcome_msg = WELCOME_MSG.getValue(rs);
+      this.stream_team = STREAM_TEAM.getValue(rs);
+      this.clips_channel_id = CLIPS_CHANNEL.getValue(rs);
       String str = TIMEZONE.getValue(rs);
       ZoneId zid;
       if (str == null) {
@@ -242,6 +337,24 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
         }
       }
       this.timezone = zid;
+    }
+
+    /**
+     * Gets stream team.
+     *
+     * @return the stream team
+     */
+    public String getStream_team() {
+      return stream_team;
+    }
+
+    /**
+     * Gets clips channel id.
+     *
+     * @return the clips channel id
+     */
+    public String getClips_channel_id() {
+      return clips_channel_id;
     }
 
     /**

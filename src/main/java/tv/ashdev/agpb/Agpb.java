@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.ashdev.agpb.commands.admin.ClipCmd;
 import tv.ashdev.agpb.commands.global.GlobalSuggestionCmd;
 import tv.ashdev.agpb.commands.settings.PrefixCmd;
 import tv.ashdev.agpb.commands.settings.SettingsCmd;
@@ -72,14 +73,14 @@ public class Agpb {
             // GLOBAL COMMANDS
             new GlobalSuggestionCmd(this),
             // ADMIN COMMANDS
-            //new SetupCmd(this, waiter),
-
-            // MODERATOR COMMANDS
+            new ClipCmd(this, waiter),
             //SETTINGS COMMANDS
             new PrefixCmd(this),
             new SettingsCmd(this),
             new TimezoneCmd(this),
             new WelcomeMsgCmd(this)
+
+            // MODERATOR COMMANDS
         );
 
     JDA api = JDABuilder.create(Constants.GATEWAY_INTENTS)

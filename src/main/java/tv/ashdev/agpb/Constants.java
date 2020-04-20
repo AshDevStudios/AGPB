@@ -37,7 +37,7 @@ public class Constants {
   /**
    * The constant PREFIX.
    */
-  public final static String PREFIX = "-";
+  public final static String PREFIX = "+";
   /**
    * The constant SUCCESS.
    */

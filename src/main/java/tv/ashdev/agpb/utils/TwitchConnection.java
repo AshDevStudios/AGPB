@@ -22,31 +22,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.ashdev.agpb.commands.settings;
+package tv.ashdev.agpb.utils;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.Permission;
-import tv.ashdev.agpb.Agpb;
-import tv.ashdev.agpb.Constants;
+import kong.unirest.Unirest;
+import tv.ashdev.agpb.data.TwitchClientID;
 
-public class SetupCmd extends Command {
+/**
+ * The type Twitch connection.
+ */
+public class TwitchConnection {
 
-  private final Agpb agpb;
-  private final EventWaiter waiter;
+  private static final String APILink = "https://api.twitch.tv/kraken/";
+  /**
+   * The Client id.
+   */
+  TwitchClientID clientID = new TwitchClientID();
 
-  public SetupCmd(Agpb agpb, EventWaiter waiter) {
-    this.waiter = waiter;
-    this.agpb = agpb;
-    this.name = "setup";
-    this.guildOnly = true;
-    this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
-    this.category = Constants.CATEGORIES.get(1);
+  /**
+   * Connection string.
+   *
+   * @param url the url
+   * @return the string
+   */
+  public String Connection(String url) {
+    return Unirest.get(APILink + url)
+        .header("Client-ID", clientID.getId())
+        .header("Accept", "application/vnd.twitchtv.v5+json")
+        .asString()
+        .getBody();
   }
 
-  @Override
-  protected void execute(CommandEvent event) {
-
+  /**
+   * Clip data string.
+   *
+   * @param url     the url
+   * @param channel the channel
+   * @return the string
+   */
+  public String ClipData(String url, String channel) {
+    return Unirest.get(APILink + url)
+        .header("Client-ID", clientID.getId())
+        .header("Accept", "application/vnd.twitchtv.v5+json")
+        .queryString("channel", channel)
+        .queryString("period", "day")
+        .asString()
+        .getBody();
   }
+
 }
