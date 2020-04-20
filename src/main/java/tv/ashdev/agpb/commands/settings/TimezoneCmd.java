@@ -62,14 +62,14 @@ public class TimezoneCmd extends Command {
   protected void execute(CommandEvent event) {
 
     if (event.getArgs().equalsIgnoreCase("none")) {
-      agpb.getDatabase().getSettings().setTimezone(event.getGuild(), null);
+      agpb.getDatabase().settings.setTimezone(event.getGuild(), null);
       event.replySuccess("The timezone has been reset.");
       return;
     }
 
     try {
       ZoneId newzone = ZoneId.of(event.getArgs());
-      agpb.getDatabase().getSettings().setTimezone(event.getGuild(), newzone);
+      agpb.getDatabase().settings.setTimezone(event.getGuild(), newzone);
       event.replySuccess("You have set the Timezone to `" + newzone.getId() + "`");
     } catch (Exception e) {
       event.replyError("`" + event.getArgs() + "` is not a valid timezone!");

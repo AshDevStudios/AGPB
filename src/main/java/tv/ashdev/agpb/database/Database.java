@@ -35,7 +35,7 @@ public class Database extends DatabaseConnector {
   /**
    * The Settings.
    */
-  private final GuildSettingsDataManager settings;
+  public final GuildSettingsDataManager settings;
 
   /**
    * Instantiates a new Database.
@@ -47,14 +47,8 @@ public class Database extends DatabaseConnector {
    */
   public Database(String host, String user, String password) throws SQLException {
     super(host, user, password);
-
     settings = new GuildSettingsDataManager(this);
-
     init();
 
-  }
-
-  public GuildSettingsDataManager getSettings() {
-    return settings;
   }
 }

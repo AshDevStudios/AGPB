@@ -61,12 +61,12 @@ public class WelcomeMsgCmd extends Command {
   protected void execute(CommandEvent event) {
 
     if (event.getArgs().equalsIgnoreCase("none")) {
-      agpb.getDatabase().getSettings().setWelcomeMsg(event.getGuild(), null);
+      agpb.getDatabase().settings.setWelcomeMsg(event.getGuild(), null);
       event.replySuccess("The welcome message command has been reset");
       return;
     }
 
-    agpb.getDatabase().getSettings().setWelcomeMsg(event.getGuild(), event.getArgs());
+    agpb.getDatabase().settings.setWelcomeMsg(event.getGuild(), event.getArgs());
     event.replySuccess("The new welcome message has been set!");
 
   }

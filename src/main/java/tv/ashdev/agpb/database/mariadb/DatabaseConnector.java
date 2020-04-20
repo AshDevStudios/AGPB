@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DatabaseConnector {
 
-  private Connection connection;
+  private final Connection connection;
   /**
    * The constant LOG.
    */
@@ -92,7 +92,7 @@ public class DatabaseConnector {
               str += ", PRIMARY KEY (" + manager.primaryKey() + ")";
             }
             LOG.info(str);
-            s.execute("CREATE TABLE " + manager.getTableName() + "(" + str + ")");
+            s.execute("CREATE TABLE IF NOT EXISTS " + manager.getTableName() + "(" + str + ")");
           }
           for (SQLColumn col : manager.getColumns()) {
             if (!connection.getMetaData().getColumns(null, null, manager.getTableName(), col.name)

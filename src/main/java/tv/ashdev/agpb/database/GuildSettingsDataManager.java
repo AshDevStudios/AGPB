@@ -219,10 +219,12 @@ public class GuildSettingsDataManager extends DataManager implements GuildSettin
     private final ZoneId timezone;
     private final String welcome_msg;
 
+
     private GuildSettings() {
       this.prefix = null;
       this.timezone = DEFAULT_TIMEZONE;
       this.welcome_msg = null;
+
     }
 
     private GuildSettings(ResultSet rs) throws SQLException {

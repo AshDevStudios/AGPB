@@ -22,54 +22,47 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package tv.ashdev.agpb.commands.settings;
+package tv.ashdev.agpb.commands.global;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.Permission;
 import tv.ashdev.agpb.Agpb;
 import tv.ashdev.agpb.Constants;
-import tv.ashdev.agpb.utils.FormatUtil;
 
-/**
- * The type Settings cmd.
- */
-public class SettingsCmd extends Command {
+public class GlobalSuggestionCmd extends Command {
 
   private final Agpb agpb;
 
-  /**
-   * Instantiates a new Settings cmd.
-   *
-   * @param agpb the agpb
-   */
-  public SettingsCmd(Agpb agpb) {
+  public GlobalSuggestionCmd(Agpb agpb) {
     this.agpb = agpb;
-    this.name = "settings";
-    this.help = "Shows current settings for your server";
-    this.guildOnly = true;
-    this.category = Constants.CATEGORIES.get(3);
-    this.userPermissions = new Permission[]{Permission.MANAGE_SERVER};
+    this.name = "gsuggestion";
+    this.aliases = new String[]{"gs", "gsuggest"};
+    this.arguments = "<SUGGESTION>";
+    this.category = Constants.CATEGORIES.get(0);
+    this.help = "Send suggestions straight to the AGPB discord";
   }
 
-  /**
-   * Execute.
-   *
-   * @param event the event
-   */
   @Override
   protected void execute(CommandEvent event) {
+    String guildID = "694486487135289445";
+    String textChannelID = "694537948062023753";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm a dd/MM/yy");
+    ZoneId zone = agpb.getDatabase().settings.getTimeZone(event.getGuild());
 
-    event.getChannel().sendMessage(new MessageBuilder()
-        .append(FormatUtil.filterEveryone(
-            "**" + event.getSelfUser().getName() + "** settings on **" + event.getGuild().getName()
-                + "**:"))
-        .setEmbed(new EmbedBuilder()
-            .addField(agpb.getDatabase().settings.getSettingsDisplay(event.getGuild()))
-            .setColor(event.getSelfMember().getColor())
-            .build()).build()).queue();
+    EmbedBuilder eb = new EmbedBuilder()
+        .addField("Suggestion", event.getArgs(), false)
+        .setAuthor(event.getMember().getUser().getName(), null,
+            event.getMember().getUser().getAvatarUrl())
+        .setFooter(event.getGuild().getName() + " - " + event.getMessage().getTimeCreated()
+            .format(formatter.withZone(zone)));
 
+    Objects.requireNonNull(Objects.requireNonNull(event.getJDA().getGuildById(guildID))
+        .getTextChannelById(textChannelID)).sendMessage(eb.build()).queue(message -> {
+      event.getMessage().delete().queue();
+    });
   }
 }

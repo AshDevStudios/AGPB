@@ -25,7 +25,6 @@
 package tv.ashdev.agpb;
 
 import com.jagrosh.jdautilities.command.Command.Category;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,11 +34,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
  * The type Constants.
  */
 public class Constants {
-
-  /**
-   * The constant STARTUP.
-   */
-  public final static OffsetDateTime STARTUP = OffsetDateTime.now();
   /**
    * The constant PREFIX.
    */
@@ -96,6 +90,5 @@ public class Constants {
       new Category("MODERATOR"), // 2
       new Category("SETTINGS") // 3
   );
-
 
 }

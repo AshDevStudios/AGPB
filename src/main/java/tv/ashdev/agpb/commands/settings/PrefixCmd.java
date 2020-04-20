@@ -69,7 +69,7 @@ public class PrefixCmd extends Command {
     }
 
     if (event.getArgs().equalsIgnoreCase("none")) {
-      agpb.getDatabase().getSettings().setPrefix(event.getGuild(), null);
+      agpb.getDatabase().settings.setPrefix(event.getGuild(), null);
       event.replySuccess("The server prefix has been reset.");
       return;
     }
@@ -81,7 +81,7 @@ public class PrefixCmd extends Command {
       return;
     }
 
-    agpb.getDatabase().getSettings().setPrefix(event.getGuild(), event.getArgs());
+    agpb.getDatabase().settings.setPrefix(event.getGuild(), event.getArgs());
     event.replySuccess("The server prefix has been set to `" + event.getArgs() + "`\n"
         + "Note that the default prefix (`"
         + event.getClient().getPrefix()

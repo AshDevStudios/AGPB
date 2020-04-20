@@ -33,6 +33,7 @@ import tv.ashdev.agpb.database.mariadb.SQLColumn;
  */
 public class BooleanColumn extends SQLColumn<Boolean> {
 
+
   /**
    * Instantiates a new Boolean column.
    *
@@ -51,8 +52,8 @@ public class BooleanColumn extends SQLColumn<Boolean> {
    */
   @Override
   public String getDataDescription() {
-    return "BOOLEAN" + (defaultValue == null ? ""
-        : " DEFAULT " + defaultValue.toString().toUpperCase()) + nullable();
+    return "TINYINT" + (defaultValue == null ? ""
+        : " DEFAULT " + defaultValue) + nullable();
   }
 
   /**

@@ -38,7 +38,7 @@ public class GuildEvent extends ListenerAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(GuildEvent.class);
 
-  private Agpb agpb;
+  private final Agpb agpb;
 
   /**
    * Instantiates a new Guild event.
@@ -56,7 +56,7 @@ public class GuildEvent extends ListenerAdapter {
    */
   @Override
   public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-    String msg = agpb.getDatabase().getSettings().getWelcomeMsg(event.getGuild());
+    String msg = agpb.getDatabase().settings.getWelcomeMsg(event.getGuild());
     User user = event.getUser();
     user.openPrivateChannel().queue(
         privateChannel -> {

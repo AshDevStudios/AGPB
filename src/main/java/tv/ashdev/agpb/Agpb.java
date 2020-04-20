@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tv.ashdev.agpb.commands.global.SuggestionCmd;
+import tv.ashdev.agpb.commands.global.GlobalSuggestionCmd;
 import tv.ashdev.agpb.commands.settings.PrefixCmd;
 import tv.ashdev.agpb.commands.settings.SettingsCmd;
 import tv.ashdev.agpb.commands.settings.TimezoneCmd;
@@ -67,15 +67,14 @@ public class Agpb {
         .setOwnerId(Constants.OWNER_ID)
         .setEmojis(Constants.SUCCESS, Constants.WARNING, Constants.ERROR)
         .setServerInvite(Constants.SERVER_INVITE)
-        .setGuildSettingsManager(database.getSettings())
+        .setGuildSettingsManager(database.settings)
         .addCommands(
             // GLOBAL COMMANDS
-            new SuggestionCmd(this),
-
+            new GlobalSuggestionCmd(this),
             // ADMIN COMMANDS
+            //new SetupCmd(this, waiter),
 
             // MODERATOR COMMANDS
-
             //SETTINGS COMMANDS
             new PrefixCmd(this),
             new SettingsCmd(this),
@@ -110,7 +109,6 @@ public class Agpb {
   public static void main(String[] args) throws Exception {
     // Instantiating the bot settings here so it can be used on every class you need
     new Agpb();
-
   }
 
 }
